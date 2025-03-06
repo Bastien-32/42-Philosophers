@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:11:45 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/06 18:10:49 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/03/06 19:43:45 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,16 +61,27 @@ void *philos_routine(void *arg)
     return (NULL);
 }
 
+void	error_malloc_philos(t_rules *rules)
+{
+	int	i;
+
+	i = 0;
+	while (i < rules->nb_philos)
+		pthread_mutex_destroy(&rules->forks[i++]);
+	pthread_mutex_destroy(&rules->print_mutex);
+	free(rules->forks);
+	free(rules->philos);
+	write(2, "Error: Memory allocation failed for philosophers.\n", 51);
+	exit (1);
+}
+
 void	init_philos(t_rules *rules)
 {
 	int	i;
 
 	rules->philos = malloc(sizeof(t_philo) * rules->nb_philos);
 	if (!rules->philos)
-	{
-		printf("Error: Memory allocation failed for philosophers.\n");
-		return ;
-	}
+		error_malloc_philos(rules);
 	i = 0;
 	while (i < rules->nb_philos)
 	{
@@ -94,12 +105,12 @@ void	init_rules(char **argv, t_rules *rules)
 		rules->nb_meat = ft_atoi(argv[5]);
 	else
 		rules->nb_meat = -1;
-	rules->start_time = get_time_in_ms();
+	rules->start_time = get_time_in_ms(); // a deplacer dans la fonction ou on cree les thread, ici il y a des ms qui vont se perdre le tempsde faire les init
 	rules->forks = malloc(sizeof(pthread_mutex_t) * rules->nb_philos);
 	if (!rules->forks)
 	{
-		printf("Error: Memory allocation failed for forks.\n");
-		return ;
+		write(2, "Error: Memory allocation failed for forks.\n", 44);
+		exit (1);
 	}
 	i = 0;
 	while (i < rules->nb_philos)
@@ -107,21 +118,40 @@ void	init_rules(char **argv, t_rules *rules)
 	pthread_mutex_init(&rules->print_mutex, NULL);
 }
 
+void	check_parameters(int argc, char **argv)
+{
+	int	i;
+
+	if (argc < 5 || argc > 6)
+	{
+		write(2, "Usage: ./philo number_of_philos time_die time_eat "
+              "time_sleep [meals]\n", 70);
+		exit (1);
+	}
+	i = 1;
+	while (i < argc)
+	{
+		if (ft_atoi(argv[i]) < 0 || ft_atoi(argv[i]) > 2147483647)
+		{
+			write(2, "Error: Enter positive int (0 to 2147483647).\n", 46);
+			exit (1);
+		}
+		i++;
+	}
+	if (argv[1][0] == '1')
+	{
+		write(2, "Error: Only one fork available.\n"
+			"The philosopher will starve.\n", 62);
+		exit(1);
+	}
+}
+
 int	main(int argc, char **argv)
 {
 	t_rules rules;
 	int		i;
-	
-	(void)argv;
-	
-	//fair un check erreur si on entre des chiffres < 0 ou >INT_MAX et le 
-	//regrouper avec le if ci-dessous 
-	if (argc < 5 || argc > 6)
-	{
-		printf("Usage : number_of_philosophers time_to_die time_to_eat ");
-		printf("time_to_sleep [number_of_times_each_philosopher_must_eat]");
-		return (0);
-	}
+
+	check_parameters(argc, argv);
 	init_rules(argv, &rules);
 	init_philos(&rules);
 	//start_simulation(&rules)
