@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:11:45 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/11 10:04:37 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/03/10 17:30:16 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ void	init_philos(t_rules *rules)
 		rules->philos[i].f_right = &rules->forks[i];
 		rules->philos[i].f_left = &rules->forks[(i + 1) % rules->nb_philos];
 		rules->philos[i].rules = rules;
-		pthread_mutex_init(&rules->philos[i].meal_mutex, NULL);
 		i++;
 	}
 }
@@ -159,8 +158,10 @@ void	print_status(int id, char *status, t_philo *philo)
 	long	time_passed;
 
 	time_passed = get_time_in_ms() - philo->rules->start_time;
+	printf("Philo %d essaie de lock print_mutex\n", id);
 	pthread_mutex_lock(&philo->rules->print_mutex);
 	printf("%ld %d %s\n",time_passed, id, status);
+	printf("Philo %d va unlock print_mutex\n", id);
 	pthread_mutex_unlock(&philo->rules->print_mutex);
 }
 
@@ -202,17 +203,31 @@ void	*philos_routine(void *arg)
 	while (1)
 	{
 		take_forks(philo);
-		
-		pthread_mutex_lock(&philo->meal_mutex);
-		philo->last_meal_time = get_time_in_ms();
-		pthread_mutex_unlock(&philo->meal_mutex);
-		
+		printf("uhu\n");
+		pthread_mutex_lock(&philo->rules->print_mutex);
 		print_status(philo->id, "is eating", philo);
+		pthread_mutex_unlock(&philo->rules->print_mutex);
+		printf("uhu2\n");
+		/* pthread_mutex_lock(&philo->rules->print_mutex);
+		printf("%ld temps apres printf status %d\n", get_time_in_ms() - philo->rules->start_time, philo->id);
+		pthread_mutex_unlock(&philo->rules->print_mutex); */
+
 		usleep(philo->rules->time_to_eat * 1000);
+		pthread_mutex_lock(&philo->rules->print_mutex);
+		printf("%ld temps apres manger avant release fork %d\n", get_time_in_ms() - philo->rules->start_time, philo->id);
+		pthread_mutex_unlock(&philo->rules->print_mutex);
 		release_forks(philo);
+		pthread_mutex_lock(&philo->rules->print_mutex);
+		printf("%ld temps apres manger apres release fork %d\n", get_time_in_ms() - philo->rules->start_time, philo->id);
+		pthread_mutex_unlock(&philo->rules->print_mutex);
+
 		
 		print_status(philo->id, "is sleeping", philo);
 		usleep(philo->rules->time_to_sleep * 1000);
+		
+		pthread_mutex_lock(&philo->rules->print_mutex);
+		printf("%ld temps apres dormir %d\n", get_time_in_ms() - philo->rules->start_time, philo->id);
+		pthread_mutex_unlock(&philo->rules->print_mutex);
 		
 		print_status(philo->id, "is thinking", philo);
 	}
@@ -221,67 +236,8 @@ void	*philos_routine(void *arg)
 
 void	start_simulation(t_rules *rules)
 {
-	int			i;
-	pthread_t	monitor_thread;
-
-	i = 0;
-	rules->start_time = get_time_in_ms();
-	
-	// 🔥 Démarrer le moniteur avant les philosophes
-	if (pthread_create(&monitor_thread, NULL, monitoring_thread, rules) != 0)
-	{
-		printf("Erreur : impossible de créer le thread de surveillance.\n");
-		exit(1);
-	}
-
-	while (i < rules->nb_philos)
-	{
-		if (pthread_create(&rules->philos[i].thread, NULL, philos_routine, &rules->philos[i]) != 0)
-			error_create_threads(rules, i);
-		i++;		
-	}
-	i = 0;
-	while (i < rules->nb_philos)
-		pthread_join(rules->philos[i++].thread, NULL);
-}
-
-void	*monitoring_thread(void *arg)
-{
-	t_rules	*rules;
-	int		i;
-
-	rules = (t_rules *)arg;
-	while (1)
-	{
-		i = 0;
-		while (i < rules->nb_philos)
-		{
-			long current_time = get_time_in_ms();
-			pthread_mutex_lock(&rules->philos[i].meal_mutex);
-			if ((current_time - rules->philos[i].last_meal_time) > rules->time_to_die)
-			{
-				print_status(rules->philos[i].id, "died", &rules->philos[i]);
-				exit(1);
-			}
-			pthread_mutex_unlock(&rules->philos[i].meal_mutex);
-			
-			i++;
-		}
-		usleep(500);
-	}
-	return (NULL);
-}
-
-void	start_simulation(t_rules *rules)
-{
 	int	i;
-	pthread_t	monitor_thread;
 
-	if (pthread_create(&monitor_thread, NULL, monitoring_thread, rules) != 0)
-	{
-		printf("Error : impossible to create the survey thread.\n");
-		exit(1);
-	}
 	i = 0;
 	rules->start_time = get_time_in_ms();	
 	while (i < rules->nb_philos)
