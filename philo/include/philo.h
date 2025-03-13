@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:12:25 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/11 09:56:38 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/03/13 11:21:52 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <sys/time.h>
-
 
 /* ****************************************************************************
 								  MSG PRINTF
@@ -43,9 +42,11 @@ typedef struct s_rules
 	int				time_to_sleep;
 	long			nb_meat;
 	long			start_time;
+	int				stop_simulation;
 	struct s_philo	*philos;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	print_mutex;
+	pthread_mutex_t	death_mutex;
 }					t_rules;
 
 typedef struct s_philo
