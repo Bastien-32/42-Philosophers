@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:11:45 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/13 11:21:41 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/03/13 12:07:32 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,12 +168,9 @@ void	print_status(int id, char *status, t_philo *philo)
 
 void	take_forks(t_philo *philo)
 {
-	if (philo->id == philo->rules->nb_philos && philo->rules->nb_philos % 2 != 0)
-	{
-		long long target_time = get_time_in_ms() + 100;
-		while (get_time_in_ms() < target_time)
-			usleep(500);
-	}
+	if (philo->id == philo->rules->nb_philos \
+										&& philo->rules->nb_philos % 2 != 0)
+		usleep(100);
 	if (philo->id % 2 == 0)
 	{
 		pthread_mutex_lock(philo->f_right);
@@ -200,24 +197,10 @@ void	*philos_routine(void *arg)
 {
 	t_philo	*philo;
 	philo = (t_philo *)arg;
-	long long start_time = get_time_in_ms();
-	long long target_time = start_time + 200; // Décalage initial pour les pairs
 
-	if (philo->id % 2 == 0)
-	{
-		while (get_time_in_ms() < target_time) // Attendre précisément 200ms
-			usleep(500); 
-	}
-	if (philo->rules->nb_philos % 2 != 0 && philo->id == philo->rules->nb_philos)
-	{
-		target_time += 100; // Décalage supplémentaire de 100ms pour le dernier philosophe impair
-		while (get_time_in_ms() < target_time)
-			usleep(500);
-	}
-	/* if (philo->id % 2 == 0)
-		usleep(200); 
-	if (philo->rules->nb_philos % 2 != 0 && philo->id == philo->rules->nb_philos)
-		usleep(300); */
+	if (philo->id == philo->rules->nb_philos && philo->rules->nb_philos % 2 != 0)
+		usleep(100);
+
 	while (1)
 	{		
 		if (philo->rules->stop_simulation)
