@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:12:25 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/19 16:57:24 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/03/19 12:00:30 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,8 @@ typedef struct s_philo
 
 void	error_exit(const char *message);
 void	error_malloc_philos(t_rules *rules);
-//void	error_create_monitor(t_rules *rules);
-//void	error_create_threads(t_rules *rules, int i);
+void	error_create_monitor(t_rules *rules);
+void	error_create_threads(t_rules *rules, int i);
 
 /* ****************************************************************************
 							init_and_check_param.c
@@ -91,7 +91,7 @@ void	init_rules(char **argv, t_rules *rules);
 
 void	*monitoring_thread(void *arg);
 void	check_philosophers(t_rules *rules);
-int		philo_died(t_rules *rules, int i);
+int		philo_has_died(t_rules *rules, int i);
 //void	philo_die(t_rules *rules, int i);
 int		all_philos_full(t_rules *rules);
 
@@ -99,11 +99,10 @@ int		all_philos_full(t_rules *rules);
 								philo_routine.c
 **************************************************************************** */
 
-int		stop_simu(t_philo *philo);
 void	*philos_routine(void *arg);
 void	philo_is_eating(t_philo *philo);
-void	even_take_forks(t_philo *philo);
-void	odd_take_forks(t_philo *philo);
+void	take_forks(t_philo *philo);
+void	release_forks(t_philo *philo);
 
 /* ****************************************************************************
 									utils.c
@@ -120,6 +119,6 @@ long 	get_time_in_ms(void);
 **************************************************************************** */
 
 void	print_status(int id, char *status, t_philo *philo);
-void	quit_program(t_rules *rules);
+//void	quit_program(t_rules *rules, long time_passed, char *msg);
 
 #endif

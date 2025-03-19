@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 17:29:29 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/18 18:15:47 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/03/19 13:58:01 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ void	init_philos(t_rules *rules)
 		rules->philos[i].f_left = &rules->forks[(i + 1) % rules->nb_philos];
 		rules->philos[i].rules = rules;
 		rules->philos[i].nb_meals = 0;
-		pthread_mutex_init(&rules->philos[i].meal_mutex, NULL);
+		pthread_mutex_init(&rules->philos[i].last_meal_mutex, NULL);
+		pthread_mutex_init(&rules->philos[i].nb_meals_mutex, NULL);
 		i++;
 	}
 }
@@ -60,7 +61,6 @@ void	init_rules(char **argv, t_rules *rules)
 	rules->time_to_eat = ft_atoi(argv[3]);
 	rules->time_to_sleep = ft_atoi(argv[4]);
 	rules->stop_simulation = 0;
-	rules->simulation_end = 0;
 	if (argv[5])
 		rules->nb_meat = ft_atoi(argv[5]);
 	else
