@@ -6,11 +6,11 @@
 #    By: badal-la <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/18 17:41:05 by badal-la          #+#    #+#              #
-#    Updated: 2025/03/20 11:50:09 by badal-la         ###   ########.fr        #
+#    Updated: 2025/03/20 11:49:52 by badal-la         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME	=	philo
+NAME	=	philo_bonus
 
 CC		=	cc
 CFLAGS	=	-g -Wall -Wextra -Werror
@@ -35,7 +35,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
-	@echo ✅ "Philo compiled\n"
+	@echo ✅ "Philo_bonus compiled\n"
 
 clean:
 	rm -f $(OBJS)

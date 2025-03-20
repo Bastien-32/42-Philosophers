@@ -6,11 +6,11 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 17:19:04 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/20 10:24:02 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/03/20 11:48:02 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
 /**
  * @brief Convert a string with ascii numbers on int numbers

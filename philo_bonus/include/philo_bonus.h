@@ -1,23 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   philo_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:12:25 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/20 11:58:00 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/03/20 15:31:13 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#ifndef PHILO_BONUS_H
+# define PHILO_BONUS_H
 
 # include <pthread.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <sys/time.h>
+# include <semaphore.h>
+# include <fcntl.h>
+#include <sys/stat.h> 
 
 /* ****************************************************************************
 								   MESSAGES
@@ -25,7 +28,7 @@
 
 # define USAGE "Usage: ./philo number_of_philos time_die \
 time_eat time_sleep [meals]\n"
-# define ERROR_MALLOC_FORKS "Error: Memory allocation failed for forks.\n"
+# define ERROR_SEM_FORKS "Error: Fail to create semaphores for forks.\n"
 # define ERROR_MALLOC_PHILOS "Error: Memory allocation failed for \
 philosophers.\n"
 # define ERROR_MONITOR "Error : impossible to create the survey thread.\n"
@@ -35,6 +38,8 @@ philosopher %d\n"
 # define ERROR_INT "Error: Enter positive int (0 to 2147483647).\n"
 # define HAS_TAKEN_FORK "has taken a fork"
 # define END_AFTER_N_MEALS "%ld All philo have eaten %ld time\n"
+# define ERROR_SEM_LAST_MEAL_TIME "Error in sem_open for last_meal_sem"
+# define ERROR_SEM_NB_MEALS "Error in sem_open for nb_meal_sem"
 
 typedef struct s_rules	t_rules;
 
@@ -48,9 +53,9 @@ typedef struct s_rules
 	long			start_time;
 	int				stop_simulation;
 	struct s_philo	*philos;
-	pthread_mutex_t	*forks;
-	pthread_mutex_t	print_mutex;
-	pthread_mutex_t	death_mutex;
+	sem_t			*forks;
+	sem_t			*print_sem;
+	sem_t			*death_sem;
 	pthread_t		monitor_thread;
 }					t_rules;
 
@@ -58,13 +63,13 @@ typedef struct s_philo
 {
 	int				id;
 	long			last_meal_time;
-	pthread_mutex_t	last_meal_mutex;
+	sem_t			*last_meal_sem;
 	pthread_t		thread;
-	pthread_mutex_t	*f_right;
-	pthread_mutex_t	*f_left;
+	sem_t			*f_right;
+	sem_t			*f_left;
 	t_rules			*rules;
 	int				nb_meals;
-	pthread_mutex_t	nb_meals_mutex;
+	sem_t			*nb_meals_sem;
 }					t_philo;
 
 /* ****************************************************************************
@@ -101,8 +106,8 @@ int		all_philos_full(t_rules *rules);
 int		stop_simu(t_philo *philo);
 void	*philos_routine(void *arg);
 void	philo_is_eating(t_philo *philo);
-void	even_take_forks(t_philo *philo);
-void	odd_take_forks(t_philo *philo);
+//void	even_take_forks(t_philo *philo);
+//void	odd_take_forks(t_philo *philo);
 
 /* ****************************************************************************
 									utils.c
@@ -120,5 +125,8 @@ long	get_time_in_ms(void);
 
 void	print_status(int id, char *status, t_philo *philo);
 void	quit_program(t_rules *rules);
+size_t	ft_strlen(const char *s);
+char	*ft_strjoin(char *s1, char *s2);
+char	*ft_itoa(int n);
 
 #endif

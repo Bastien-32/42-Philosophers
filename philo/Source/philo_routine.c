@@ -6,12 +6,11 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 17:12:40 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/20 10:05:31 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/03/20 10:21:59 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
 
 int	stop_simu(t_philo *philo)
 {
@@ -28,9 +27,10 @@ int	stop_simu(t_philo *philo)
 void	*philos_routine(void *arg)
 {
 	t_philo	*philo;
-	philo = (t_philo *)arg;
 
-	if (philo->id == philo->rules->nb_philos && philo->rules->nb_philos % 2 != 0)
+	philo = (t_philo *)arg;
+	if (philo->id == philo->rules->nb_philos && \
+											philo->rules->nb_philos % 2 != 0)
 		usleep(100);
 	while (!stop_simu(philo))
 	{
@@ -72,7 +72,6 @@ void	even_take_forks(t_philo *philo)
 {
 	pthread_mutex_lock(philo->f_right);
 	print_status(philo->id, HAS_TAKEN_FORK, philo);
-	//if (stop_simu(philo) || philo->rules->nb_philos == 1)
 	if (stop_simu(philo))
 	{
 		pthread_mutex_unlock(philo->f_right);
