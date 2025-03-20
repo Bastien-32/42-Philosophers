@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 17:33:49 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/20 10:25:23 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/03/20 21:48:29 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,12 @@ void	check_philosophers(t_rules *rules)
 	if (all_philos_full(rules))
 	{
 		time_passed = get_time_in_ms() - rules->start_time;
-		pthread_mutex_lock(&rules->print_mutex);
-		printf(END_AFTER_N_MEALS, time_passed, rules->nb_meat);
-		pthread_mutex_unlock(&rules->print_mutex);
 		pthread_mutex_lock(&rules->death_mutex);
 		rules->stop_simulation = 1;
 		pthread_mutex_unlock(&rules->death_mutex);
+		pthread_mutex_lock(&rules->print_mutex);
+		printf(END_AFTER_N_MEALS, time_passed, rules->nb_meat);
+		pthread_mutex_unlock(&rules->print_mutex);
 	}
 }
 
