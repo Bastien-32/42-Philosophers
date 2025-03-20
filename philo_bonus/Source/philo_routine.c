@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 17:12:40 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/20 15:53:55 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/03/20 20:48:53 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ void	*philos_routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
+	if (philo->id % 2 == 0)
+		ft_usleep(200);
 	while (!stop_simu(philo))
 	{
 		philo_is_eating(philo);
@@ -54,7 +56,7 @@ void	philo_is_eating(t_philo *philo)
 	print_status(philo->id, "is eating", philo);
 	sem_wait(philo->last_meal_sem);
 	philo->last_meal_time = get_time_in_ms();
-	sem_wait(philo->last_meal_sem);
+	sem_post(philo->last_meal_sem);
 	ft_usleep(philo->rules->time_to_eat);
 	sem_post(philo->rules->forks);
 	sem_post(philo->rules->forks);

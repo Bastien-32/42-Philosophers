@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:12:25 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/20 11:58:00 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/03/20 21:29:16 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,6 @@ typedef struct s_philo
 
 void	error_exit(const char *message);
 void	error_malloc_philos(t_rules *rules);
-//void	error_create_monitor(t_rules *rules);
-//void	error_create_threads(t_rules *rules, int i);
 
 /* ****************************************************************************
 							init_and_check_param.c
@@ -91,7 +89,6 @@ void	init_rules(char **argv, t_rules *rules);
 void	*monitoring_thread(void *arg);
 void	check_philosophers(t_rules *rules);
 int		philo_died(t_rules *rules, int i);
-//void	philo_die(t_rules *rules, int i);
 int		all_philos_full(t_rules *rules);
 
 /* ****************************************************************************

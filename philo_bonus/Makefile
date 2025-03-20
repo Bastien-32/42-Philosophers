@@ -6,7 +6,7 @@
 #    By: badal-la <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/18 17:41:05 by badal-la          #+#    #+#              #
-#    Updated: 2025/03/20 11:49:52 by badal-la         ###   ########.fr        #
+#    Updated: 2025/03/20 20:57:26 by badal-la         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,8 @@ SRCS	=	$(SRCDIR)/errors.c \
 			$(SRCDIR)/monitoring.c \
 			$(SRCDIR)/philo_routine.c \
 			$(SRCDIR)/utils.c \
-			$(SRCDIR)/utils2.c
+			$(SRCDIR)/utils2.c \
+			$(SRCDIR)/utils3.c
 
 OBJS	=	$(SRCS:.c=.o)
 

@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 17:29:29 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/20 15:45:06 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/03/20 21:01:40 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,17 @@ void	check_parameters(int argc, char **argv)
 	}
 }
 
+void	fill_basic_variables(t_rules *rules, int i)
+{
+	rules->philos[i].id = i + 1;
+	rules->philos[i].rules = rules;
+	rules->philos[i].nb_meals = 0;
+}
+
 void	init_philos(t_rules *rules)
 {
-	int	i;
-	char *sem_name;
+	int		i;
+	char	*sem_name;
 
 	rules->philos = malloc(sizeof(t_philo) * rules->nb_philos);
 	if (!rules->philos)
@@ -40,15 +47,15 @@ void	init_philos(t_rules *rules)
 	i = 0;
 	while (i < rules->nb_philos)
 	{
+		fill_basic_variables(rules, i);
 		sem_name = ft_strjoin("/last_meal_time ", ft_itoa(i));
-		rules->philos[i].id = i + 1;
-		rules->philos[i].rules = rules;
-		rules->philos[i].nb_meals = 0;
+		sem_unlink(sem_name);
 		rules->philos[i].last_meal_sem = sem_open(sem_name, O_CREAT, 0644, 1);
 		if (rules->philos[i].last_meal_sem == SEM_FAILED)
 			error_exit(ERROR_SEM_LAST_MEAL_TIME);
 		free(sem_name);
 		sem_name = ft_strjoin("/nb_meals ", ft_itoa(i));
+		sem_unlink(sem_name);
 		rules->philos[i].nb_meals_sem = sem_open(sem_name, O_CREAT, \
 																	0644, 1);
 		if (rules->philos[i].nb_meals_sem == SEM_FAILED)
@@ -69,7 +76,10 @@ void	init_rules(char **argv, t_rules *rules)
 		rules->nb_meat = ft_atoi(argv[5]);
 	else
 		rules->nb_meat = -1;
-	rules->forks = sem_open("/forks", O_CREAT, 0644, rules->nb_philos / 2);
+	sem_unlink("/forks");
+	sem_unlink("/print");
+	sem_unlink("/death");
+	rules->forks = sem_open("/forks", O_CREAT, 0644, rules->nb_philos);
 	if (rules->forks == SEM_FAILED)
 		error_exit(ERROR_SEM_FORKS);
 	rules->print_sem = sem_open("/print", O_CREAT, 0644, 1);

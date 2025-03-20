@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 17:33:49 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/20 15:27:08 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/03/20 21:15:26 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,12 @@ void	check_philosophers(t_rules *rules)
 	if (all_philos_full(rules))
 	{
 		time_passed = get_time_in_ms() - rules->start_time;
-		sem_wait(rules->print_sem);
-		printf(END_AFTER_N_MEALS, time_passed, rules->nb_meat);
-		sem_post(rules->print_sem);
 		sem_wait(rules->death_sem);
 		rules->stop_simulation = 1;
 		sem_post(rules->death_sem);
+		sem_wait(rules->print_sem);
+		printf(END_AFTER_N_MEALS, time_passed, rules->nb_meat);
+		sem_post(rules->print_sem);
 	}
 }
 
@@ -60,7 +60,7 @@ int	philo_died(t_rules *rules, int i)
 	sem_post(rules->philos[i].last_meal_sem);
 	if (time_since_last_meal > rules->time_to_die)
 	{
-		print_status(rules->philos[i].id, "died", &rules->philos[i]);
+		print_status_stop_simu(rules->philos[i].id, "died", &rules->philos[i]);
 		sem_wait(rules->death_sem);
 		rules->stop_simulation = 1;
 		sem_post(rules->death_sem);

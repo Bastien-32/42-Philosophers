@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:12:25 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/20 15:31:13 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/03/20 21:26:57 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <sys/time.h>
 # include <semaphore.h>
 # include <fcntl.h>
-#include <sys/stat.h> 
+# include <sys/stat.h> 
 
 /* ****************************************************************************
 								   MESSAGES
@@ -65,8 +65,6 @@ typedef struct s_philo
 	long			last_meal_time;
 	sem_t			*last_meal_sem;
 	pthread_t		thread;
-	sem_t			*f_right;
-	sem_t			*f_left;
 	t_rules			*rules;
 	int				nb_meals;
 	sem_t			*nb_meals_sem;
@@ -78,14 +76,13 @@ typedef struct s_philo
 
 void	error_exit(const char *message);
 void	error_malloc_philos(t_rules *rules);
-//void	error_create_monitor(t_rules *rules);
-//void	error_create_threads(t_rules *rules, int i);
 
 /* ****************************************************************************
 							init_and_check_param.c
 **************************************************************************** */
 
 void	check_parameters(int argc, char **argv);
+void	fill_basic_variables(t_rules *rules, int i);
 void	init_philos(t_rules *rules);
 void	init_rules(char **argv, t_rules *rules);
 
@@ -96,7 +93,6 @@ void	init_rules(char **argv, t_rules *rules);
 void	*monitoring_thread(void *arg);
 void	check_philosophers(t_rules *rules);
 int		philo_died(t_rules *rules, int i);
-//void	philo_die(t_rules *rules, int i);
 int		all_philos_full(t_rules *rules);
 
 /* ****************************************************************************
@@ -106,8 +102,6 @@ int		all_philos_full(t_rules *rules);
 int		stop_simu(t_philo *philo);
 void	*philos_routine(void *arg);
 void	philo_is_eating(t_philo *philo);
-//void	even_take_forks(t_philo *philo);
-//void	odd_take_forks(t_philo *philo);
 
 /* ****************************************************************************
 									utils.c
@@ -124,7 +118,14 @@ long	get_time_in_ms(void);
 **************************************************************************** */
 
 void	print_status(int id, char *status, t_philo *philo);
+void	print_status_stop_simu(int id, char *status, t_philo *philo);
 void	quit_program(t_rules *rules);
+void	close_sem_rules(t_rules *rules);
+
+/* ****************************************************************************
+								   utils3.c
+**************************************************************************** */
+
 size_t	ft_strlen(const char *s);
 char	*ft_strjoin(char *s1, char *s2);
 char	*ft_itoa(int n);
