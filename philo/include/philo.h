@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:12:25 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/19 16:57:24 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/03/20 09:34:19 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ philosophers.\n"
 philosopher %d\n"
 # define FILL_WITH_NUMBERS "Error: fill parameters only with numbers\n"
 # define ERROR_INT "Error: Enter positive int (0 to 2147483647).\n"
-# define ERROR_ONE_PHILO "Error: Only one fork available.\n"
 # define HAS_TAKEN_FORK "has taken a fork"
 # define END_AFTER_N_MEALS "%ld All philo have eaten %ld time\n"
 

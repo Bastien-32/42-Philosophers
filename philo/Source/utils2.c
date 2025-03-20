@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 17:38:24 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/19 17:07:12 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/03/20 10:06:21 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,18 +32,18 @@ void	print_status(int id, char *status, t_philo *philo)
 void	quit_program(t_rules *rules)
 {
 	int j;
-	int	i;
 
-	i = 0;
 	j = 0;
 	usleep(200);
 	pthread_join(rules->monitor_thread, NULL);
+	while (j < rules->nb_philos)
+		pthread_join(rules->philos[j++].thread, NULL);
+	j = 0;
 	while (j < rules->nb_philos)
 	{
 		pthread_mutex_destroy(&rules->forks[j]);
 		pthread_mutex_destroy(&rules->philos[j].last_meal_mutex);
 		pthread_mutex_destroy(&rules->philos[j].nb_meals_mutex);
-		pthread_join(rules->philos[j].thread, NULL);
 		j++;
 	}
 	pthread_mutex_destroy(&rules->print_mutex);

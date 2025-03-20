@@ -6,18 +6,49 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:11:45 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/19 17:07:05 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/03/20 10:08:43 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 #include <stdio.h>
 
+int	only_one_philo(t_rules *rules)
+{
+	int		i;
+	long	current_time;
+
+	i = 0;
+	if (rules->nb_philos == 1)
+	{
+		current_time = get_time_in_ms() - rules->philos->rules->start_time;
+		printf("%ld 1 has taken a fork\n", current_time);
+		ft_usleep(rules->time_to_die); 
+		current_time = get_time_in_ms() - rules->philos->rules->start_time;
+		printf("%ld 1 died\n", current_time);
+		while (i < rules->nb_philos)
+		{
+			pthread_mutex_destroy(&rules->forks[i]);
+			pthread_mutex_destroy(&rules->philos[i].last_meal_mutex);
+			pthread_mutex_destroy(&rules->philos[i].nb_meals_mutex);
+			i++;
+		}
+		pthread_mutex_destroy(&rules->print_mutex);
+		pthread_mutex_destroy(&rules->death_mutex);
+		free(rules->forks);
+		free(rules->philos);
+		return (1);
+	}
+	return(0);
+}
+
 void	start_simulation(t_rules *rules)
 {
 	int	i;
 
 	rules->start_time = get_time_in_ms();
+	if(only_one_philo(rules))
+		exit (1);
 	i = 0;
 	while (i < rules->nb_philos)
 	{

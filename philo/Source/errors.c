@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 17:26:07 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/19 16:28:10 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/03/19 17:15:56 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	error_malloc_philos(t_rules *rules)
 	while (i < rules->nb_philos)
 		pthread_mutex_destroy(&rules->forks[i++]);
 	pthread_mutex_destroy(&rules->print_mutex);
+	pthread_mutex_destroy(&rules->death_mutex);
 	free(rules->forks);
 	free(rules->philos);
 	error_exit(ERROR_MALLOC_PHILOS);

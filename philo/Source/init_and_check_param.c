@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 17:29:29 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/19 13:58:01 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/03/20 09:34:10 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@ void	check_parameters(int argc, char **argv)
 			error_exit(ERROR_INT);
 		i++;
 	}
-	if (argv[1][0] == '1')
-		error_exit(ERROR_ONE_PHILO);
 }
 
 void	init_philos(t_rules *rules)

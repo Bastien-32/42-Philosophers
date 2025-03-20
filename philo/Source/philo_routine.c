@@ -6,7 +6,7 @@
 /*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 17:12:40 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/19 16:24:10 by badal-la         ###   ########.fr       */
+/*   Updated: 2025/03/20 10:05:31 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,9 @@ void	philo_is_eating(t_philo *philo)
 	if (stop_simu(philo))
 		return ;
 	print_status(philo->id, "is eating", philo);
+	pthread_mutex_lock(&philo->last_meal_mutex);
 	philo->last_meal_time = get_time_in_ms();
+	pthread_mutex_unlock(&philo->last_meal_mutex);
 	ft_usleep(philo->rules->time_to_eat);
 	pthread_mutex_unlock(philo->f_right);
 	pthread_mutex_unlock(philo->f_left);
@@ -70,6 +72,7 @@ void	even_take_forks(t_philo *philo)
 {
 	pthread_mutex_lock(philo->f_right);
 	print_status(philo->id, HAS_TAKEN_FORK, philo);
+	//if (stop_simu(philo) || philo->rules->nb_philos == 1)
 	if (stop_simu(philo))
 	{
 		pthread_mutex_unlock(philo->f_right);
