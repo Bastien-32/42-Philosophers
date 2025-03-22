@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_routine.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: student <student@student.42.fr>            +#+  +:+       +#+        */
+/*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 17:12:40 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/22 17:38:17 by student          ###   ########.fr       */
+/*   Updated: 2025/03/20 20:48:53 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,22 +26,22 @@ int	stop_simu(t_philo *philo)
 
 void	*philos_routine(void *arg)
 {
-	t_philo		*philo;
-	pthread_t	monitor;
+	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	sem_wait(philo->last_meal_sem);
-	philo->last_meal_time = get_time_in_ms();
-	sem_post(philo->last_meal_sem);
-	pthread_create(&monitor, NULL, monitor_life, philo);
-	pthread_detach(monitor);
 	if (philo->id % 2 == 0)
 		ft_usleep(200);
-	while (1)
+	while (!stop_simu(philo))
 	{
 		philo_is_eating(philo);
+		if (stop_simu(philo))
+			break ;
 		print_status(philo->id, "is sleeping", philo);
+		if (stop_simu(philo))
+			break ;
 		ft_usleep(philo->rules->time_to_sleep);
+		if (stop_simu(philo))
+			break ;
 		print_status(philo->id, "is thinking", philo);
 	}
 	return (NULL);
@@ -53,10 +53,10 @@ void	philo_is_eating(t_philo *philo)
 	print_status(philo->id, HAS_TAKEN_FORK, philo);
 	sem_wait(philo->rules->forks);
 	print_status(philo->id, HAS_TAKEN_FORK, philo);
+	print_status(philo->id, "is eating", philo);
 	sem_wait(philo->last_meal_sem);
 	philo->last_meal_time = get_time_in_ms();
 	sem_post(philo->last_meal_sem);
-	print_status(philo->id, "is eating", philo);
 	ft_usleep(philo->rules->time_to_eat);
 	sem_post(philo->rules->forks);
 	sem_post(philo->rules->forks);
@@ -64,4 +64,3 @@ void	philo_is_eating(t_philo *philo)
 	philo->nb_meals++;
 	sem_post(philo->nb_meals_sem);
 }
-

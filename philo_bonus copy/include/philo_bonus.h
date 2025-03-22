@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: student <student@student.42.fr>            +#+  +:+       +#+        */
+/*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:12:25 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/22 17:03:33 by student          ###   ########.fr       */
+/*   Updated: 2025/03/20 21:26:57 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@
 # include <semaphore.h>
 # include <fcntl.h>
 # include <sys/stat.h> 
-# include <sys/wait.h>
-# include <signal.h>
 
 /* ****************************************************************************
 								   MESSAGES
@@ -66,7 +64,7 @@ typedef struct s_philo
 	int				id;
 	long			last_meal_time;
 	sem_t			*last_meal_sem;
-	pid_t			pid;
+	pthread_t		thread;
 	t_rules			*rules;
 	int				nb_meals;
 	sem_t			*nb_meals_sem;
@@ -93,17 +91,15 @@ void	init_rules(char **argv, t_rules *rules);
 **************************************************************************** */
 
 void	*monitoring_thread(void *arg);
-int		check_philosophers(t_rules *rules);
+void	check_philosophers(t_rules *rules);
 int		philo_died(t_rules *rules, int i);
 int		all_philos_full(t_rules *rules);
-void	kill_all_philos(t_rules *rules);
 
 /* ****************************************************************************
 								philo_routine.c
 **************************************************************************** */
 
 int		stop_simu(t_philo *philo);
-void	sigterm_handler(int sig);
 void	*philos_routine(void *arg);
 void	philo_is_eating(t_philo *philo);
 

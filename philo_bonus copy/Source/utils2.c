@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: student <student@student.42.fr>            +#+  +:+       +#+        */
+/*   By: badal-la <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 17:38:24 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/22 15:24:47 by student          ###   ########.fr       */
+/*   Updated: 2025/03/20 21:25:31 by badal-la         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	quit_program(t_rules *rules)
 	usleep(200);
 	pthread_join(rules->monitor_thread, NULL);
 	while (i < rules->nb_philos)
-		waitpid(rules->philos[i++].pid, NULL, 0);
+		pthread_join(rules->philos[i++].thread, NULL);
 	i = 0;
 	while (i < rules->nb_philos)
 	{
