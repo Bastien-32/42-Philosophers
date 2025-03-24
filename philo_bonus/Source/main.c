@@ -6,7 +6,7 @@
 /*   By: student <student@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:11:45 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/22 17:02:37 by student          ###   ########.fr       */
+/*   Updated: 2025/03/24 14:32:49 by student          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,26 +34,58 @@ int	only_one_philo(t_rules *rules)
 	return (0);
 }
 
+int	get_philo_index_by_pid(pid_t pid, t_rules *rules)
+{
+	int i = 0;
+	while (i < rules->nb_philos)
+	{
+		if (rules->philos[i].pid == pid)
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+
 void	wait_for_termination(t_rules *rules)
 {
 	int		status;
 	pid_t	pid;
+	int		nb_exited;
 	int		i;
 
+	nb_exited = 0;
 	while (1)
 	{
 		pid = waitpid(-1, &status, 0);
+		//printf("[DEBUG] Process terminé → pid = %d\n", pid);
 		if (pid == -1)
 			error_exit("waitpid failed");
-		if (WIFEXITED(status) && WEXITSTATUS(status) == 1)
+		if (WIFEXITED(status))
 		{
-			i = 0;
-			while (i < rules->nb_philos)
+			if (WEXITSTATUS(status) == 1)
 			{
-				kill(rules->philos[i].pid, SIGTERM);
-				i++;
+				i = get_philo_index_by_pid(pid, rules);
+				//printf("[DEBUG] Ce pid correspond au philosophe id = %d\n", rules->philos[i].id);
+				long now = get_time_in_ms() - rules->start_time;
+				sem_post(rules->print_sem);
+				sem_wait(rules->print_sem);
+				printf("%ld %d died\n", now, rules->philos[i].id);
+				sem_post(rules->print_sem);
+				i = 0;
+				while (i < rules->nb_philos)
+					kill(rules->philos[i++].pid, SIGTERM);
+				break ;
 			}
-			break ;
+			else if (WEXITSTATUS(status) == 0)
+				nb_exited++;
+			if (rules->nb_meat > 0 && nb_exited == rules->nb_philos)
+			{
+				long t = get_time_in_ms() - rules->start_time;
+				sem_wait(rules->print_sem);
+				printf(END_AFTER_N_MEALS, t, rules->nb_meat);
+				sem_post(rules->print_sem);
+				break ;
+			}
 		}
 	}
 }

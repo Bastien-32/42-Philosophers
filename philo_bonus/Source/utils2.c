@@ -6,7 +6,7 @@
 /*   By: student <student@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 17:38:24 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/22 15:24:47 by student          ###   ########.fr       */
+/*   Updated: 2025/03/24 09:04:09 by student          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,6 @@ void	quit_program(t_rules *rules)
 	i = 0;
 	usleep(200);
 	pthread_join(rules->monitor_thread, NULL);
-	while (i < rules->nb_philos)
-		waitpid(rules->philos[i++].pid, NULL, 0);
 	i = 0;
 	while (i < rules->nb_philos)
 	{

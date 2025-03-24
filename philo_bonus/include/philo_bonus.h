@@ -6,7 +6,7 @@
 /*   By: student <student@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:12:25 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/22 17:03:33 by student          ###   ########.fr       */
+/*   Updated: 2025/03/24 09:02:52 by student          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,17 +93,15 @@ void	init_rules(char **argv, t_rules *rules);
 **************************************************************************** */
 
 void	*monitoring_thread(void *arg);
-int		check_philosophers(t_rules *rules);
-int		philo_died(t_rules *rules, int i);
-int		all_philos_full(t_rules *rules);
-void	kill_all_philos(t_rules *rules);
+int		check_philosophers(t_philo *philo);
+int		philo_died(t_philo *philo);
+int		philo_full(t_philo *philo);
 
 /* ****************************************************************************
 								philo_routine.c
 **************************************************************************** */
 
 int		stop_simu(t_philo *philo);
-void	sigterm_handler(int sig);
 void	*philos_routine(void *arg);
 void	philo_is_eating(t_philo *philo);
 

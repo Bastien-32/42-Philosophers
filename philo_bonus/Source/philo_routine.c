@@ -6,7 +6,7 @@
 /*   By: student <student@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 17:12:40 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/22 17:38:17 by student          ###   ########.fr       */
+/*   Updated: 2025/03/24 09:56:39 by student          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ void	*philos_routine(void *arg)
 	sem_wait(philo->last_meal_sem);
 	philo->last_meal_time = get_time_in_ms();
 	sem_post(philo->last_meal_sem);
-	pthread_create(&monitor, NULL, monitor_life, philo);
+	if(pthread_create(&monitor, NULL, monitoring_thread, philo) != 0)
+		exit(1);
 	pthread_detach(monitor);
 	if (philo->id % 2 == 0)
 		ft_usleep(200);
