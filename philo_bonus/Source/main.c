@@ -6,7 +6,7 @@
 /*   By: student <student@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:11:45 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/24 14:32:49 by student          ###   ########.fr       */
+/*   Updated: 2025/03/24 18:42:33 by student          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ void	start_simulation(t_rules *rules)
 {
 	int	i;
 
+	
 	rules->start_time = get_time_in_ms();
 	if (only_one_philo(rules))
 		exit (1);

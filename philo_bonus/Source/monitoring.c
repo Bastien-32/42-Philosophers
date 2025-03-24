@@ -6,7 +6,7 @@
 /*   By: student <student@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 17:33:49 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/24 14:27:47 by student          ###   ########.fr       */
+/*   Updated: 2025/03/24 18:11:46 by student          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ int	philo_died(t_philo *philo)
 
 int	philo_full(t_philo *philo)
 {
-
 	if (philo->rules->nb_meat <= 0)
 		return (0);
 	sem_wait(philo->nb_meals_sem);
@@ -66,4 +65,6 @@ int	philo_full(t_philo *philo)
 	sem_post(philo->nb_meals_sem);
 	return (1);
 }
+
+
 

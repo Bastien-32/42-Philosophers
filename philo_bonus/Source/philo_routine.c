@@ -6,7 +6,7 @@
 /*   By: student <student@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 17:12:40 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/24 09:56:39 by student          ###   ########.fr       */
+/*   Updated: 2025/03/24 18:10:32 by student          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,3 @@ void	philo_is_eating(t_philo *philo)
 	philo->nb_meals++;
 	sem_post(philo->nb_meals_sem);
 }
-

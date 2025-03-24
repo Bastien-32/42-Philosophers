@@ -6,7 +6,7 @@
 /*   By: student <student@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 16:12:25 by badal-la          #+#    #+#             */
-/*   Updated: 2025/03/24 09:02:52 by student          ###   ########.fr       */
+/*   Updated: 2025/03/24 18:10:46 by student          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,11 @@ typedef struct s_rules
 	sem_t			*print_sem;
 	sem_t			*death_sem;
 	pthread_t		monitor_thread;
+	pid_t			*all_pids;
+	int				*meal_round;
+	int				round_count;
+	int				meals_received;
+	pthread_t		sync_thread;
 }					t_rules;
 
 typedef struct s_philo
